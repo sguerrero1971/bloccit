@@ -9,7 +9,6 @@ require 'random_data'
 
 
  50.times do
-
    Post.create!(
      title:  RandomData.random_sentence,
      body:   RandomData.random_paragraph
@@ -24,6 +23,8 @@ require 'random_data'
      body: RandomData.random_paragraph
    )
  end
+
+ Post.create_with(body: 'Random Post body').find_or_create_by(title: 'Random Post title') {|post| Comment.create!(post: post, body: 'Unique body')}
 
  puts "Seed finished"
  puts "#{Post.count} posts created"
