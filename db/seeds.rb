@@ -8,23 +8,33 @@
 require 'random_data'
 
 
- 50.times do
+#     50.times do
 
-   Post.create!(
-     title:  RandomData.random_sentence,
-     body:   RandomData.random_paragraph
-   )
- end
- posts = Post.all
+#       Post.create!(
+#         title:  RandomData.random_sentence,
+#         body:   RandomData.random_paragraph
+#       )
+#     end
+#     posts = Post.all
 
 
- 100.times do
-   Comment.create!(
-     post: posts.sample,
-     body: RandomData.random_paragraph
-   )
- end
+#     100.times do
+#       Comment.create!(
+#         post: posts.sample,
+#         body: RandomData.random_paragraph
+#       )
+#     end
+
+     50.times do
+
+       Question.create!(
+         title:  RandomData.random_sentence,
+         body:   RandomData.random_paragraph,
+         resolved: RandomData.random_resolved
+       )
+     end
+     questions = Question.all
 
  puts "Seed finished"
- puts "#{Post.count} posts created"
- puts "#{Comment.count} comments created"
+ puts "#{questions.count} Questions created"
+ #  puts "#{Comment.count} comments created"
