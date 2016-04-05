@@ -19,6 +19,7 @@ class PostsController < ApplicationController
 
     if @post.save
       @post.labels = Label.update_labels(params[:post][:labels])
+      create_vote
       flash[:notice] = "Post was saved."
       redirect_to [@topic, @post]
     else
@@ -69,6 +70,10 @@ end
       flash[:alert] = "You must be an admin to do that."
       redirect_to [post.topic, post]
     end
+  end
+
+  def create_vote
+    current_user.votes.create(value: 1, post: @post)
   end
 
 end
