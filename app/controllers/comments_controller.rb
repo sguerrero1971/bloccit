@@ -3,10 +3,9 @@ class CommentsController < ApplicationController
    before_action :authorize_user, only: [:destroy]
 
    def create
-     @topic = Topic.find(params[:topic_id])
      @post = Post.find(params[:post_id])
-     @comment = @topic.@post.comments.new(comment_params)
-     @comment.user = current_user
+     comment = @post.comments.new(comment_params)
+     comment.user = current_user
 
      if comment.save
        flash[:notice] = "Comment saved successfully."
@@ -18,9 +17,8 @@ class CommentsController < ApplicationController
    end
 
    def destroy
-      @topic = Topic.find(params[:topic_id])
       @post = Post.find(params[:post_id])
-      @comment = @topic.@post.comments.find(params[:id])
+      comment = @post.comments.find(params[:id])
 
       if comment.destroy
         flash[:notice] = "Comment was deleted."
