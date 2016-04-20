@@ -1,6 +1,10 @@
 class FavoritesController < ApplicationController
   before_action :require_sign_in
 
+  def show
+    @favorited = Favotires.find(params[:id])
+  end
+
   def create
     post = Post.find(params[:post_id])
     favorite = current_user.favorites.build(post: post)
