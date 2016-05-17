@@ -8,17 +8,17 @@ require 'rails_helper'
    context "unauthenticated user" do
 
      it "PUT update returns http unauthenticated" do
-       put :update, id: my_post.id, post: {title: "Post Title", body: "Post Body"}
+       put :update, topic_id: my_topic.id, id: my_post.id, post: {title: "Post Title", body: "Post Body"}
        expect(response).to have_http_status(401)
      end
 
-     it "POST create returns http unauthenticated" do
-       post :create, post: {title: "Post Title", body: "Post Body"}
+     it "POST create rsssssseturns http unauthenticated" do
+       post :create, topic_id: my_topic.id, post: {title: "Post Title", body: "Post Body"}
        expect(response).to have_http_status(401)
      end
 
      it "DELETE destroy returns http unauthenticated" do
-       delete :destroy, id: my_post.id
+       delete :destroy,topic_id: my_topic.id, id: my_post.id
        expect(response).to have_http_status(401)
      end
    end
@@ -29,17 +29,17 @@ require 'rails_helper'
      end
 
       it "PUT update returns http forbidden" do
-        put :update, id: my_post.id, post: {title: "Post Title", body: "Post Body"}
+        put :update,topic_id: my_topic.id, id: my_post.id, post: {title: "Post Title", body: "Post Body"}
         expect(response).to have_http_status(403)
       end
 
       it "POST create returns http forbidden" do
-        post :create, post: {title: "Post Title", body: "Post Body"}
+        post :create,topic_id: my_topic.id, post: {title: "Post Title", body: "Post Body"}
         expect(response).to have_http_status(403)
       end
 
       it "DELETE destroy returns http forbidden" do
-        delete :destroy, id: my_post.id
+        delete :destroy,topic_id: my_topic.id, id: my_post.id
         expect(response).to have_http_status(403)
       end
    end
@@ -48,11 +48,11 @@ require 'rails_helper'
       before do
         my_user.admin!
         controller.request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Token.encode_credentials(my_user.auth_token)
-        @new_post = build(:post)
+        @new_post = build(:post, topic: my_topic)
       end
 
       describe "PUT update" do
-        before { put :update, id: my_post.id, post: {title: @new_post.title, body: @new_post.body} }
+        before { put :update,topic_id: my_topic.id, id: my_post.id, post: {title: @new_post.title, body: @new_post.body} }
 
         it "returns http success" do
           expect(response).to have_http_status(:success)
@@ -69,9 +69,11 @@ require 'rails_helper'
       end
 
       describe "POST create" do
-        before { post :create, post: {title: @new_post.title, body: @new_post.body} }
+        before { post :create, topic_id: my_topic.id, post: {title: @new_post.title, body: @new_post.body} }
 
         it "returns http success" do
+          puts @new_post.valid?
+          expect(JSON.parse(response.body)["error"]).to be_nil
           expect(response).to have_http_status(:success)
         end
 
@@ -87,7 +89,7 @@ require 'rails_helper'
       end
 
       describe "DELETE destroy" do
-        before { delete :destroy, id: my_post.id }
+        before { delete :destroy, topic_id: my_topic.id, id: my_post.id }
 
         it "returns http success" do
           expect(response).to have_http_status(:success)
