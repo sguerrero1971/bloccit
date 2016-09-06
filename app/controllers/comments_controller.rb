@@ -7,6 +7,10 @@ class CommentsController < ApplicationController
      comment = @post.comments.new(comment_params)
      comment.user = current_user
 
+     @topic = Topic.find(params[:post_id])
+     comment = @topic.comments.new(comment_params)
+     comment.user = current_user
+
      if comment.save
        flash[:notice] = "Comment saved successfully."
        redirect_to [@post.topic, @post]
@@ -17,8 +21,7 @@ class CommentsController < ApplicationController
    end
 
    def destroy
-      @post = Post.find(params[:post_id])
-      comment = @post.comments.find(params[:id])
+      comment = Comment.find(params[:id])
 
       if comment.destroy
         flash[:notice] = "Comment was deleted."
